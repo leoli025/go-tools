@@ -1,9 +1,9 @@
 - command:
     name: "gp"
-    desc: "拉取Dev记录"
+    desc: "拉取Local记录"
     exec:
-     - "git checkout dev"
-     - "git pull origin dev"
+     - "git checkout local"
+     - "git pull origin local"
 
 - command:
     name: "gs"

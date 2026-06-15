@@ -3,14 +3,16 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"os"
 	"os/exec"
 	"strings"
-
-	"gopkg.in/yaml.v3"
 )
 
 var (
+	//go:embed local.yaml
+	configLocal string
+
 	//go:embed dev.yaml
 	configDev string
 
@@ -31,13 +33,15 @@ type CommandWrapper struct {
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("用法: go_cmd <环境> [<命令名>]")
-		fmt.Println("环境: dev, pro")
+		fmt.Println("环境: local, dev, pro")
 		return
 	}
 
 	config := ""
 	env := os.Args[1]
 	switch env {
+	case "local":
+		config = configLocal
 	case "dev":
 		config = configDev
 	case "pro":
@@ -45,7 +49,7 @@ func main() {
 	}
 	if config == "" {
 		fmt.Printf("环境[%s]的配置文件不存在\n", env)
-		fmt.Println("可用环境: dev, pro")
+		fmt.Println("环境: local, dev, pro")
 		return
 	}
 
@@ -59,7 +63,7 @@ func main() {
 	if len(os.Args) == 2 {
 		fmt.Printf("环境[%s]可用命令:\n", env)
 		for _, wrapper := range commands {
-			fmt.Printf(" - %-15s %s\n", wrapper.Command.Name, wrapper.Command.Desc)
+			fmt.Printf("  %-15s %s\n", wrapper.Command.Name, wrapper.Command.Desc)
 		}
 		return
 	}
