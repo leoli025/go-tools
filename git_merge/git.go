@@ -46,6 +46,11 @@ func PullBranch(branch string) error {
 	return err
 }
 
+func PushBranch(branch string) error {
+	_, err := runGitCmd("push", "origin", branch)
+	return err
+}
+
 func MergeBranch(branch string) (bool, error) {
 	output, err := runGitCmd("merge", "--no-ff", branch)
 	if err != nil {
