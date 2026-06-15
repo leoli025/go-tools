@@ -1,0 +1,12 @@
+- command:
+    name: "gp"
+    desc: "拉取Dev记录"
+    exec:
+     - "git checkout dev"
+     - "git pull origin dev"
+
+- command:
+    name: "gs"
+    desc: "查看Git状态"
+    exec:
+      - "git status"
