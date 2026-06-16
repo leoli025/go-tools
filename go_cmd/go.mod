@@ -1,4 +1,4 @@
-module command
+module go_cmd
 
 go 1.25.0
 

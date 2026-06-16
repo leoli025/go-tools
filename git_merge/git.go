@@ -20,7 +20,7 @@ func runGitCmd(args ...string) (string, error) {
 }
 
 func GetCurrentBranch() (string, error) {
-	return runGitCmd("rev-parse", "--abbrev-ref", "HEAD")
+	return runGitCmd("branch", "--show-current")
 }
 
 func HasUncommittedChanges() (bool, error) {
