@@ -3,20 +3,21 @@ package main
 import (
 	_ "embed"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
 	"os/exec"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 var (
-	//go:embed local.yaml
+	//go:embed config/local.yaml
 	configLocal string
 
-	//go:embed dev.yaml
+	//go:embed config/dev.yaml
 	configDev string
 
-	//go:embed pro.yaml
+	//go:embed config/pro.yaml
 	configPro string
 )
 
