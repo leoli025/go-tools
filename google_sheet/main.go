@@ -3,10 +3,34 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"go-tools/google_sheet/config"
 	"go-tools/google_sheet/sheet"
 	"log"
 	"os"
 )
+
+func main() {
+	cfg := config.NewConfig()
+	// 获取表格数据
+	data, err := sheet.FetchSheetData(cfg.SheetId, cfg.RangeName, cfg.ApiKey)
+	if err != nil {
+		log.Fatalf("获取表格数据失败: %v", err)
+	}
+
+	// 解析翻译数据
+	translations := sheet.ParseTranslationData(data)
+	if len(translations) == 0 {
+		log.Println("没有找到翻译数据")
+		return
+	}
+
+	// 生成翻译文件
+	if err := GenerateTranslationFiles(translations, cfg.OutputDir); err != nil {
+		log.Fatalf("生成翻译文件失败: %v", err)
+	}
+
+	log.Println("翻译文件生成完成!")
+}
 
 // GenerateTranslationFiles 生成翻译文件
 func GenerateTranslationFiles(translations map[string]map[string]string, outputDir string) error {
@@ -51,29 +75,4 @@ func GenerateTranslationFiles(translations map[string]map[string]string, outputD
 	}
 
 	return nil
-}
-
-func main() {
-	sheetId := "xxx"
-	rangeName := "Sheet1!A:D"
-	apiKey := "xxx"
-	// 获取表格数据
-	data, err := sheet.FetchSheetData(sheetId, rangeName, apiKey)
-	if err != nil {
-		log.Fatalf("获取表格数据失败: %v", err)
-	}
-
-	// 解析翻译数据
-	translations := sheet.ParseTranslationData(data)
-	if len(translations) == 0 {
-		log.Println("没有找到翻译数据")
-		return
-	}
-
-	// 生成翻译文件
-	if err := GenerateTranslationFiles(translations, "./output"); err != nil {
-		log.Fatalf("生成翻译文件失败: %v", err)
-	}
-
-	log.Println("翻译文件生成完成!")
 }

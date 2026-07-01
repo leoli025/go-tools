@@ -34,3 +34,6 @@ go.work.sum
 .idea
 .trae
 bin
+**/log
+**/config/dev.yaml
+**/config/pro.yaml

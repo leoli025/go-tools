@@ -1,14 +1,13 @@
 package sheet
 
 import (
+	"go-tools/google_sheet/config"
 	"testing"
 )
 
 func TestFetchSheetData(t *testing.T) {
-	sheetId := "xxx"
-	rangeName := "Sheet1!A:D"
-	apiKey := "xxx"
-	data, err := FetchSheetData(sheetId, rangeName, apiKey)
+	cfg := config.NewConfig()
+	data, err := FetchSheetData(cfg.SheetId, cfg.RangeName, cfg.ApiKey)
 	if err != nil {
 		t.Errorf("FetchSheetData failed: %v", err)
 	}
