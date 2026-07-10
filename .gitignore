@@ -37,3 +37,4 @@ bin
 **/log
 **/config/dev.yaml
 **/config/pro.yaml
+**/scripts
