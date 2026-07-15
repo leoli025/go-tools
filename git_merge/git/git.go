@@ -1,7 +1,6 @@
 package git
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -9,14 +8,8 @@ import (
 
 func runGitCmd(args ...string) (string, error) {
 	cmd := exec.Command("git", args...)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	err := cmd.Run()
-	if err != nil {
-		return "", fmt.Errorf("%s: %s", err, strings.TrimSpace(stderr.String()))
-	}
-	return strings.TrimSpace(stdout.String()), nil
+	output, err := cmd.CombinedOutput()
+	return strings.TrimSpace(string(output)), err
 }
 
 func GetCurrentBranch() (string, error) {
@@ -55,7 +48,7 @@ func MergeBranch(branch string) (bool, error) {
 	output, err := runGitCmd("merge", "--no-ff", branch)
 	if err != nil {
 		if strings.Contains(output, "CONFLICT") || strings.Contains(err.Error(), "CONFLICT") {
-			return true, fmt.Errorf("合并冲突: %s", output)
+			return true, fmt.Errorf("%s", output)
 		}
 		return false, err
 	}

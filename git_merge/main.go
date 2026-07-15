@@ -63,13 +63,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	color.Yellow("- 切换到目标分支")
+	color.Yellow("⚠️ 切换到目标分支")
 	if err := git.CheckoutBranch(targetBranch); err != nil {
 		color.Red("❌ 切换分支失败:%v", err)
 		os.Exit(1)
 	}
 
-	color.Yellow("- 检查是否有更新")
+	color.Yellow("⚠️ 检查是否有更新")
 	hasRemoteChanges, err := git.HasRemoteChanges(targetBranch)
 	if err != nil {
 		color.Red("❌ 检查远程更新失败:%v", err)
@@ -78,7 +78,7 @@ func main() {
 	}
 
 	if hasRemoteChanges {
-		color.Yellow("- 远程分支有更新,拉取最新代码...")
+		color.Yellow("⚠️ 远程分支有更新,拉取最新代码...")
 		if err := git.PullBranch(targetBranch); err != nil {
 			color.Red("❌ 拉取代码失败:%v", err)
 			_ = git.CheckoutBranch(currentBranch)
@@ -88,27 +88,25 @@ func main() {
 		}
 	}
 
-	color.Yellow("- 合并分支:%s=>%s", currentBranch, targetBranch)
+	color.Yellow("⚠️ 合并分支:%s=>%s", currentBranch, targetBranch)
 	hasConflict, err := git.MergeBranch(currentBranch)
 	if err != nil {
-		color.Red("❌ 合并失败:%v", err)
+		color.Red("❌ 合并失败:\n%v", err)
 		if hasConflict {
 			color.Red("❌ 存在合并冲突,请手动解决后再继续")
-		} else {
-			_ = git.CheckoutBranch(currentBranch)
 		}
 		os.Exit(1)
-	} else {
-		color.Green("✅ 合并成功")
 	}
-	color.Yellow("- 推送至远程仓库...")
+
+	color.Green("✅ 合并成功")
+	color.Yellow("⚠️ 推送至远程仓库...")
 	if err := git.PushBranch(targetBranch); err != nil {
 		color.Red("❌ 推送至远程仓库失败:%v", err)
 		_ = git.CheckoutBranch(currentBranch)
 		os.Exit(1)
 	}
 	color.Green("✅ 推送成功")
-	color.Yellow("- 切回原分支:%s", currentBranch)
+	color.Yellow("⚠️ 切回原分支:%s", currentBranch)
 	if err := git.CheckoutBranch(currentBranch); err != nil {
 		color.Red("❌ 切回原分支失败:%v", err)
 		os.Exit(1)
